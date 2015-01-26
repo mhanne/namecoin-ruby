@@ -1,0 +1,54 @@
+= Namecoin-ruby
+
+Namecoin support for bitcoin-ruby[http://github.com/lian/bitcoin-ruby].
+
+
+== Installation
+
+We assume you already have a ruby 1.9 or 2.0 compatible interpreter and rubygems environment.
+
+ gem install namecoin-ruby
+
+Or add it to your Gemfile and
+
+ require 'bitcoin/namecoin'
+
+
+== Usage
+
+TODO
+
+== Documentation
+
+Always trying to improve, any help appreciated! If anything is unclear to you, let us know!
+
+Documentation is generated using yardoc:
+
+ rake doc
+
+The specs are also a good place to see how things are supposed to work.
+
+
+== Specs
+
+The specs can be run with
+
+ rake
+
+or, if you want to run a single spec
+
+ rspec spec/namecoin/namecoin_spec.rb
+
+Coverage information is automatically generated and can be found in +coverage/+ after
+the test run.
+
+
+== Contributing
+
+Any help or feedback is greatly appreciated! Just open an issue, submit a pull-request,
+or come to #bitcoin-ruby on irc.freenode.net if you want to chat.
+
+
+== License
+
+This software is licensed under the terms of the MIT license. See {file:COPYING} for details.
