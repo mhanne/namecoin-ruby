@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   # s.rubyforge_project = "namecoin-ruby"
 
   s.files         = [
-    "lib/namecoin.rb",
     "lib/bitcoin/namecoin.rb",
     "lib/bitcoin/namecoin/version.rb",
   ]
@@ -23,7 +22,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/namecoin/namecoin_spec.rb",
   ]
-  s.executables   = ["bin/namecoin_node"]
+  s.executables   = ["namecoin_node"]
   s.require_paths = ["lib"]
 
   s.required_rubygems_version = ">= 1.3.6"
