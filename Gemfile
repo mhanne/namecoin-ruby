@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem 'ffi'
 
-gem 'bitcoin-ruby', git: "git://github.com/lian/bitcoin-ruby"
+gem 'bitcoin-ruby', git: "git://github.com/mhanne/bitcoin-ruby", branch: 'next'
 # gem 'bitcoin-ruby', path: '../bitcoin-ruby'
 
 gem 'bitcoin-ruby-blockchain', git: "git://github.com/mhanne/bitcoin-ruby-blockchain"

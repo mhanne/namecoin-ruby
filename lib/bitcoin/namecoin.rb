@@ -47,6 +47,7 @@ module Bitcoin::Namecoin
         end
 
         # get type of this tx
+        # TODO: Script should have a list of TYPES where we can just add ours
         def type
           if is_name_new?;            :name_new
           elsif is_name_firstupdate?; :name_firstupdate
@@ -55,6 +56,7 @@ module Bitcoin::Namecoin
           elsif is_pubkey?;           :pubkey
           elsif is_multisig?;         :multisig
           elsif is_script_hash?;      :script_hash
+          elsif is_op_return?;        :op_return
           else;                       :unknown
           end
         end
