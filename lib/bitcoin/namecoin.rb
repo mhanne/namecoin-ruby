@@ -181,7 +181,7 @@ module Bitcoin::Namecoin
                 return nil
               end
 
-              unless blk[:depth] <= get_depth - Bitcoin::Namecoin::FIRSTUPDATE_LIMIT
+              unless blk[:height] <= height - Bitcoin::Namecoin::FIRSTUPDATE_LIMIT
                 log.debug { "name_new not yet valid: #{name_hash}" }
                 return nil
               end
@@ -214,9 +214,10 @@ module Bitcoin::Namecoin
             history
           end
 
-          def get_name_by_txout_id txout_id
+          def name_by_txout_id txout_id
             wrap_name(@db[:names][txout_id: txout_id])
           end
+          alias :get_name_by_txout_id :name_by_txout_id
 
           def wrap_name(data)
             return nil  unless data
@@ -242,28 +243,32 @@ module Bitcoin::Namecoin
           @value = data[:value]
         end
 
-        def get_txout
+        def txout
           if @txout_id.is_a?(Array)
-            @store.get_tx(@txout_id[0]).out[@txout_id[1]]
+            @store.tx(@txout_id[0]).out[@txout_id[1]]
           else
-            @store.get_txout_by_id(@txout_id)
+            @store.txout_by_id(@txout_id)
           end
         end
+        alias :get_txout :txout
 
-        def get_address
-          get_txout.get_address
+        def address
+          txout.address
         end
+        alias :get_address :address
 
-        def get_tx
-          get_txout.get_tx rescue nil
+        def tx
+          txout.tx rescue nil
         end
+        alias :get_tx :tx
 
-        def get_block
-          get_tx.get_block rescue nil
+        def block
+          tx.block rescue nil
         end
+        alias :get_block :block
 
         def expires_in
-          Bitcoin::Namecoin::EXPIRATION_DEPTH - (@store.get_depth - get_block.depth) rescue nil
+          Bitcoin::Namecoin::EXPIRATION_DEPTH - (@store.height - get_block.height) rescue nil
         end
 
         def as_json(opts = {})
