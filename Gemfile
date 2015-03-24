@@ -23,6 +23,7 @@ gem 'mysql'
 
 group :development do
   gem 'rake'
+  gem 'minitest'
   gem 'rspec'
   gem 'simplecov'
   gem 'yard'
