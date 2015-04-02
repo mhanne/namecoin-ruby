@@ -5,8 +5,8 @@ require 'bundler'
 Bundler.setup
 
 require 'bitcoin'
-require 'bitcoin/node'
 require 'bitcoin/namecoin'
+require 'bitcoin/node'
 require 'optparse'
 require 'fileutils'
 

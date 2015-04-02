@@ -1,6 +1,13 @@
 # encoding: ascii-8bit
 
 require 'bitcoin'
+
+# set bitcoin network to namecoin before we require the blockchain
+# so it will adjust its validation rules accordingly
+# TODO: take care of namecoin-specific validation from here
+# and be able to switch at runtime
+Bitcoin.network = :namecoin
+
 require 'bitcoin/blockchain'
 
 # This module includes (almost) everything necessary to add namecoin support
