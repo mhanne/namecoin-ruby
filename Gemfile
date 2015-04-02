@@ -25,6 +25,8 @@ gem 'sqlite3'
 gem 'pg'
 gem 'mysql'
 
+gem 'log4r', require: 'log4r'
+
 group :development do
   gem 'rake'
   gem 'minitest'
