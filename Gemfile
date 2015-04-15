@@ -33,5 +33,5 @@ group :development do
   gem 'rspec'
   gem 'simplecov'
   gem 'yard'
-  gem 'pry-byebug'
+  gem 'pry'
 end
