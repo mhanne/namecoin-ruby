@@ -16,7 +16,7 @@ options = Bitcoin::Config.load(defaults, :blockchain)
 options[:network] = :namecoin
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: bitcoin_node [options]"
+  opts.banner = "Usage: namecoin_node [options]"
 
   opts.separator("\nAvailable options:\n")
 

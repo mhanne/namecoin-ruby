@@ -27,6 +27,9 @@ gem 'mysql'
 
 gem 'log4r', require: 'log4r'
 
+# for namecoin_dnsd
+gem 'rubydns'
+
 group :development do
   gem 'rake'
   gem 'minitest'

@@ -2,12 +2,6 @@
 
 require 'bitcoin'
 
-# set bitcoin network to namecoin before we require the blockchain
-# so it will adjust its validation rules accordingly
-# TODO: take care of namecoin-specific validation from here
-# and be able to switch at runtime
-Bitcoin.network = :namecoin
-
 require 'bitcoin/blockchain'
 
 # This module includes (almost) everything necessary to add namecoin support
@@ -278,11 +272,15 @@ module Bitcoin::Namecoin
           Bitcoin::Namecoin::EXPIRATION_DEPTH - (@store.height - get_block.height) rescue nil
         end
 
-        def as_json(opts = {})
+        def to_hash(opts = {})
           { name: @name, value: @value, txid: get_tx.hash,
-                                 address: get_address, expires_in: expires_in }
+            address: get_address, expires_in: expires_in }
         end
+        alias :as_json :to_hash # for rails
 
+        def to_json(opts = {})
+          JSON.pretty_generate(to_hash(opts), opts)
+        end
       end
 
     end
@@ -290,3 +288,13 @@ module Bitcoin::Namecoin
   end
 
 end
+
+Namecoin = Bitcoin::Namecoin
+
+require 'bitcoin/namecoin/resolver'
+
+# set bitcoin network to namecoin before we require the blockchain
+# so it will adjust its validation rules accordingly
+# TODO: take care of namecoin-specific validation from here
+# and be able to switch at runtime
+Bitcoin.network = :namecoin

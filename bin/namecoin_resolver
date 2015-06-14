@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby
+$:.unshift( File.expand_path("../../lib", __FILE__) )
+
+require 'bundler'
+Bundler.setup
+
+require 'bitcoin/namecoin'
+require 'bitcoin/blockchain'
+
+require 'rubydns'
+
+options = {
+  listen: ["0.0.0.0", 53],
+  upstream: ["4.2.2.1", 53],
+  storage: "postgres:/namecoin",
+}
+
+optparse = OptionParser.new do |opts|
+
+  opts.banner = "Usage: namecoin_dnsd [options]"
+  
+  opts.separator("\nAvailable options:\n")
+
+  opts.on("-c", "--config FILE",
+    "Config file (default: #{Bitcoin::Config::CONFIG_PATHS})") do |file|
+    options = Bitcoin::Config.load_file(options, file, :dnsd)
+  end
+
+  opts.on("-l", "--listen [HOST:PORT]",
+    "Listen address/port (default: #{options[:listen].join(':')})") do |listen|
+    host, port = listen.split(":")
+    options[:listen] = [host, (port || 53).to_i]
+  end
+
+  opts.on("-u", "--upstream HOST:PORT",
+    "Upstream DNS server to forward non-.bit requests to") do |upstream|
+    host, port = upstream.split(":")
+    opts[:upstream] = [host, (port || 53).to_i]
+  end
+
+  opts.on("-s", "--storage CONNECTION_STRING",
+    "Use storage backend (default: #{options[:storage]})") do |storage|
+    options[:storage] = storage
+  end
+          
+end
+optparse.parse!
+
+Name, IN = Resolv::DNS::Name, Resolv::DNS::Resource::IN
+UPSTREAM = RubyDNS::Resolver.new([[:udp, *options[:upstream]], [:tcp, *options[:upstream]]])
+CHAIN = Bitcoin::Blockchain.create_store(:archive, db: options[:storage])
+RESOLVER = Namecoin::Resolver.new(CHAIN)
+
+TYPES = {
+  ip: IN::A,
+  ipv6: IN::AAAA,
+  ns: IN::NS,
+}
+
+RubyDNS::run_server(listen: [ [:udp, *options[:listen]], [:tcp, *options[:listen]] ]) do
+
+  match(/\.bit/) do |tx|
+    type = TYPES.find{|k,v| v == tx.resource_class}[0]
+    next(tx.fail!(:NXDomain))  unless res = RESOLVER.resolve(tx.name, [:ns, type])
+    type, answer = *res
+    answer = [answer]  if answer.is_a?(String)
+    answer.each do |a|
+      a = Name.create(a).to_a  if type == :ns
+      tx.respond!(a, resource_class: TYPES[type])
+    end
+  end
+
+  otherwise do |transaction|
+    transaction.passthrough!(UPSTREAM)
+  end
+end

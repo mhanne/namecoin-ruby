@@ -16,7 +16,25 @@ Or add it to your Gemfile and
 
 == Usage
 
-TODO
+Run the namecoin node just like a bitcoin-ruby-node[http://github.com/mhanne/bitcoin-ruby-node]:
+
+ ruby bin/namecoin_node
+
+Allow your user to bind to port 53:
+
+ sudo touch /etc/authbind/byport/53
+ sudo chown <user> /etc/authbind/byport/53
+ sudo chmod 755 /etc/authbind/byport/53
+
+Run the resolver:
+
+ ruby bin/namecoin_resolver
+
+Tell your system to use it:
+
+ echo "nameserver 127.0.0.1" > /etc/resolv.conf
+
+And browse away!
 
 == Documentation
 

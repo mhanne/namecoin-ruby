@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/namecoin/namecoin_spec.rb",
   ]
-  s.executables   = ["namecoin_node"]
+  s.executables   = ["namecoin_node", "namecoin_resolver"]
   s.require_paths = ["lib"]
 
   s.required_rubygems_version = ">= 1.3.6"
