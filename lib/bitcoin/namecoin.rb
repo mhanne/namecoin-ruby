@@ -188,7 +188,7 @@ module Bitcoin::Namecoin
                 return nil
               end
 
-              unless blk[:height] <= height - Bitcoin::Namecoin::FIRSTUPDATE_LIMIT
+              if blk[:height] + Bitcoin::Namecoin::FIRSTUPDATE_LIMIT > height + 1
                 log.debug { "name_new not yet valid: #{name_hash}" }
                 return nil
               end
