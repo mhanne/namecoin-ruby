@@ -135,6 +135,29 @@ describe 'Bitcoin::Namecoin' do
         name.name.should == "test"
         name.value.should == "testvalue"
         name.hash.should == Bitcoin.hash160(@rand + "test".hth)
+        name.expires_in.should == 36000
+        name.tx.hash.should == @block.tx[1].hash
+        name.block.hash.should == @block.hash
+
+        expected = {
+          name: "test",
+          value: "testvalue",
+          address: @key.addr,
+          txid: @block.tx[1].hash,
+          expires_in: 36000,
+        }
+        name.as_json.should == expected
+
+        unless @store.class.name =~ /Utxo/
+          mrkl_branch = Bitcoin.hash_mrkl_branch(@block.tx.map(&:hash), @block.tx[1].hash)
+          expected.merge!({
+                            block: @block.hash,
+                            height: 15,
+                            rawtx: @block.tx[1].to_payload.hth,
+                            mrkl_branch: mrkl_branch,
+                          })
+          name.as_json(with_all: true).should == expected
+        end
 
         # create name_update
         @new_key = Bitcoin::Key.generate

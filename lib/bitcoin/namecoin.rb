@@ -279,8 +279,18 @@ module Bitcoin::Namecoin
         end
 
         def as_json(opts = {})
-          { name: @name, value: @value, txid: get_tx.hash,
-                                 address: get_address, expires_in: expires_in }
+          res = {
+            name: @name, value: @value, txid: get_tx.hash,
+            address: get_address, expires_in: expires_in,
+          }
+          res[:block] = block.hash  if opts[:with_all] || opts[:with_block]
+          res[:height] = block.height  if opts[:with_all] || opts[:with_height]
+          res[:rawtx] = tx.to_payload.hth  if opts[:with_all] || opts[:with_rawtx]
+          if opts[:with_all] || opts[:with_mrkl_branch]
+            mrkl_branch = Bitcoin.hash_mrkl_branch(block.tx.map(&:hash), tx.hash)
+            res[:mrkl_branch] = mrkl_branch
+          end
+          res
         end
 
       end
