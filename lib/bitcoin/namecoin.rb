@@ -285,6 +285,7 @@ module Bitcoin::Namecoin
           }
           res[:block] = block.hash  if opts[:with_all] || opts[:with_block]
           res[:height] = block.height  if opts[:with_all] || opts[:with_height]
+          res[:tx_idx] = block.tx.index(tx)  if opts[:with_all] || opts[:with_tx_idx]
           res[:rawtx] = tx.to_payload.hth  if opts[:with_all] || opts[:with_rawtx]
           if opts[:with_all] || opts[:with_mrkl_branch]
             mrkl_branch = Bitcoin.hash_mrkl_branch(block.tx.map(&:hash), tx.hash)

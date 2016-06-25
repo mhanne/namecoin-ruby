@@ -153,6 +153,7 @@ describe 'Bitcoin::Namecoin' do
           expected.merge!({
                             block: @block.hash,
                             height: 15,
+                            tx_idx: 1,
                             rawtx: @block.tx[1].to_payload.hth,
                             mrkl_branch: mrkl_branch,
                           })
